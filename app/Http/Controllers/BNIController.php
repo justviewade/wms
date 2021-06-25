@@ -573,9 +573,7 @@ class BNIController extends Controller
         }
         $pesan = 'Data berhasil diubah';
         return redirect('listpbm')->with(['pesan' => $pesan]);
-        $walah = "ikown";
-
-        //aagi
+ 
     }
 
 }
