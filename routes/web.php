@@ -182,7 +182,9 @@ Route::post('/updatepelanggan','SPSController@updatepelanggan')->middleware('cek
 
     //SPS
 
-    Route::get('/listpbksps1','SPSController@listpbksps1')->middleware('ceksession');
+    Route::get('/listpbkspsacc','SPSController@listpbkspsacc')->middleware('ceksession');
+
+    Route::post('/mintainfopbk','SPSController@mintainfopbk')->middleware('ceksession'); //Done Ubah Ke Metode Post
    
     Route::get('/listpbksps2','SPSController@listpbksps2')->middleware('ceksession');
 

@@ -202,7 +202,7 @@
                             </a>
                         </div>
                         <div class="dropdown-item">
-                            <a href="{{ asset('logout')}}">
+                            <a href="{{ url('logout')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span>Log Out</span>
                             </a>
                         </div>
@@ -501,10 +501,10 @@
                             <li>
                                 <a href="{{url('listpbmspsterima')}}"> Penerimaan Barang {{(\App\Trx_PBM::all()->where('level','=',2)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',2)->count().')' : ''}} </a>
                             </li>
-                        </ul>{{(\App\Trx_PBM::all()->where('level','=',3)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',3)->count().')' : ''}}
+                        </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbmspskekurangan')}}"> Penerimaan Kekurangan  </a>
+                                <a href="{{url('listpbmspskekurangan')}}"> Penerimaan Kekurangan {{(\App\Trx_PBM::all()->where('level','=',3)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',3)->count().')' : ''}} </a>
                             </li>
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
@@ -525,7 +525,7 @@
                         </a>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbksps1')}}"> PBK Masuk (1) </a>
+                                <a href="{{url('listpbkspsacc')}}"> PBK Masuk {{(\App\Trx_PBK::all()->where('level','=',1)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',1)->count().')' : ''}}</a>
                             </li>
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">

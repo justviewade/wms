@@ -23,8 +23,9 @@
                                 <h5 style="color:grey;"><strong>Data Inventori</strong></h5>
                             </span>       
                             <span class="col-xl-6 col-md-6 col-sm-6 col-6" style="text-align:right;">
+                                <button class="btn btn-primary" onclick="window.location.href='{{ url('formpbm')}}'">Daftar PBM Baru</button>
                                 <button class="btn btn-primary" onclick="window.location.href='{{ url('formpbk')}}'">Daftar PBK Baru</button>
-                            </span>                   
+                            </span>           
                         </div>
                     </div>
                     <div class="table-responsive mb-4 mt-4">
@@ -59,7 +60,7 @@
                                         </a>
                                     </td>
                                     @else
-                                    <td> Tidak ada</td>
+                                    <td>Tidak ada</td>
                                     @endif
                                     <td>{{$tampil->aktual}}</td>
                                     <td>{{$tampil->gudang}}</td>

@@ -321,7 +321,7 @@ class BNIController extends Controller
 
 
     public function inputpbm(Request $request) {
-        $kode_trx_pbm               = $this->incrementIDpbk("str");
+        $kode_trx_pbm               = $this->incrementIDpbm("str");
         $id                         = $this->incrementIDpbm();
         $data_pbm                   = new Trx_PBM;
         $data_pbm->trx_pbm_id       = $id;
@@ -499,7 +499,7 @@ class BNIController extends Controller
         $data_pbk->status           = $request->status;
         $data_pbk->pelanggan_id     = Session::get('pelanggan_id');
         $data_pbk->pembuat          = Session::get('user_id');
-        
+
         $data_pbk->save();
 
         for ($i = 1; $i <= $request->max_indeks_array; $i++){ //Bisa diganti dengan foreach.
@@ -514,7 +514,7 @@ class BNIController extends Controller
                 $data_pbk_detail->save();
             }
         }
-        $pesan = 'Transaksi PBK - '.$kode_pbm.', berhasil ditambahkan!';
+        $pesan = 'Transaksi PBK - '.$kode_trx_pbk.', berhasil ditambahkan!';
         return redirect('listpbk')->with(['pesan' => $pesan]);
     }
 

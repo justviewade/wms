@@ -71,10 +71,12 @@
                                 <div class="form-group mb-4">
                                     <label>Perkiraan Harga (Rp)- Minimal Berat 10Kg</label>
                                     <input name="tarif_harga" id="tarif_harga" class="form-control" value="" readonly required>
+                                    <span class="text-danger not-available-msg">Layanan tidak tersedia.</span>
                                 </div>
                                 <div class="form-group mb-4">
                                     <label>Lead Time</label>
                                     <input name="lead_time" id="lead_time" class="form-control" value="" readonly required>
+                                    <span class="text-danger not-available-msg">Layanan tidak tersedia.</span>
                                 </div>
                                 <div class="form-group mb-4">
                                     <label>Nama Program</label>
@@ -84,7 +86,6 @@
                                     <label>Keterangan</label>
                                     <textarea name="keterangan" class="form-control"></textarea required>
                                 </div>
-                               
                                 <div class="form-group mb-4">
                                     <label>List Barang</label><br>
                                         <div class="table-responsive">
@@ -180,6 +181,8 @@
     <script src="{{asset ('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
     <script src="{{asset ('assets/js/edit-custom.js')}}"></script>
     <script>
+        $('.not-available-msg').hide();
+
         function tarifCek() {
             $('#kota_tujuan option[value=""]').remove();
             $('#kota_tujuan').selectpicker('refresh');
@@ -204,9 +207,16 @@
                     if (data.tarif == null && data.leadtime == null) {
                         $('#tarif_harga').val('Layanan Tidak Tersedia');
                         $('#lead_time').val('Layanan Tidak Tersedia');
+                        $('.not-available-msg').show();
+                    }
+                    else if (data.tarif != null && data.leadtime == null) {
+                        $('#tarif_harga').val(data.tarif);
+                        $('#lead_time').val('Tidak Ada Informasi');
+                        $('.not-available-msg').hide();
                     } else {
                         $('#tarif_harga').val(data.tarif);
                         $('#lead_time').val(data.leadtime);
+                        $('.not-available-msg').hide();
                     }
                 }
             });
@@ -321,5 +331,12 @@
         $form.calx('getCell', 'G1').calculate();
     });
 
+    // Form validation
+    $('#dynamic').submit(function(){
+        if ($('#tarif_harga').val() == 'Layanan Tidak Tersedia' || $('#lead_time').val() == 'Layanan Tidak Tersedia') {
+            alert('Jenis layanan tidak tersedia, mohon pilih jenis layanan tersedia.');
+            return false;
+        } 
+    });
     </script>
 @endsection 

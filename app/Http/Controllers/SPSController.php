@@ -20,6 +20,7 @@ use App\Trx_PBM_Acc;
 use App\Trx_PBM_Terima;
 use App\Trx_PBM_Alokasi;
 use App\Trx_PBM_Detail;
+use App\Trx_PBK;
 use App\Tarif;
 Use Session;
 use DB;
@@ -208,9 +209,10 @@ class SPSController extends Controller
         ->join('tbl_kategori_barang','tbl_barang.kategori_id','=','tbl_kategori_barang.kategori_id')
         ->join('tbl_supplier','tbl_trx_pbm_detail.supplier_id','=','tbl_supplier.supplier_id')
         //->join('tbl_pelanggan','tbl_trx_pbm.pelanggan_id','=','tbl_pelanggan.pelanggan_id')
-        ->where('tbl_trx_pbm.trx_pbm_id','=',$id    )
+        ->where('tbl_trx_pbm.trx_pbm_id','=',$id)
         ->get();
         return $data_list_informasi_pbm;
+        //Harus Rubah ke format JSON untuk keamanan
     }
 
     public function updatepbmspsacc(Request $request){
@@ -428,6 +430,8 @@ class SPSController extends Controller
 
     public function listpbmspsalokasi() {
         $data_list_pbm_alokasi = DB::select('SELECT *, total_terima - total_alokasi as kekurangan FROM ( SELECT tbl_trx_pbm_detail.trx_pbm_detail_id, tbl_trx_pbm.kode_trx_pbm, tbl_trx_pbm.level, tbl_trx_pbm.tgl_pbm_masuk, tbl_pelanggan.nama_pelanggan, tbl_barang.nama_barang, tbl_kategori_barang.nama_kategori, tbl_supplier.nama_supplier, tbl_trx_pbm_detail.qty, IFNULL( ( SELECT SUM(tbl_trx_pbm_terima.aktual) FROM tbl_trx_pbm_terima WHERE trx_pbm_detail_id = tbl_trx_pbm_detail.trx_pbm_detail_id ), 0 ) AS total_terima, IFNULL( ( SELECT SUM( tbl_trx_pbm_alokasi.alokasi_akt ) FROM tbl_trx_pbm_alokasi WHERE trx_pbm_detail_id = tbl_trx_pbm_detail.trx_pbm_detail_id ), 0 ) AS total_alokasi FROM tbl_trx_pbm_detail INNER JOIN tbl_trx_pbm ON tbl_trx_pbm.kode_trx_pbm = tbl_trx_pbm_detail.trx_pbm_id INNER JOIN tbl_pelanggan ON tbl_trx_pbm.pelanggan_id = tbl_pelanggan.pelanggan_id INNER JOIN tbl_barang ON tbl_barang.barang_id = tbl_trx_pbm_detail.barang_id INNER JOIN tbl_kategori_barang on tbl_barang.kategori_id = tbl_kategori_barang.kategori_id INNER JOIN tbl_supplier ON tbl_trx_pbm_detail.supplier_id = tbl_supplier.supplier_id ORDER by tbl_trx_pbm.tgl_pbm_masuk ASC ) as data WHERE total_terima - total_alokasi <> 0'); 
+
+        //return $data_list_pbm_alokasi;
         //Rubah ke ORM Query Builder Nanti
 
         //return $data_list_pbm_alokasi;
@@ -529,10 +533,16 @@ class SPSController extends Controller
         return view('SPS/Inventori/list_inventori_master');
     }
         
-    
-    public function listpbksps1() {
-        $data_list_pbm = DB::select('   ');
-        return view('SPS/PBK/list_pbk_sps',compact('data_list_pbm'));
+    public function listpbkspsacc() {
+        $data_list_pbk_acc = DB::select('select tbl_trx_pbk.status, tbl_trx_pbk.level, tbl_pelanggan.nama_pelanggan, tbl_trx_pbk.trx_pbk_id as id_utama, tbl_trx_pbk.kode_trx_pbk, tbl_trx_pbk.tgl_pbk_masuk, tbl_trx_pbk.tgl_pbk, tbl_trx_pbk.nama_tujuan, tbl_trx_pbk.alamat_tujuan, tbl_master_kota.kota_tujuan, tbl_jenis_layanan.nama_layanan, tbl_trx_pbk.kota_id as id_kota, tbl_trx_pbk.layanan_id as id_layanan, tbl_trx_pbk.pelanggan_id as id_pelanggan, tbl_trx_pbk.tarif_harga, tbl_trx_pbk.lead_time, ( SELECT tbl_tarif.tarif FROM tbl_tarif WHERE tbl_tarif.layanan_id = id_layanan AND tbl_tarif.kota_id = id_kota AND tbl_tarif.pelanggan_id = id_pelanggan ) AS tarif_real, ( SELECT tbl_tarif.leadtime FROM tbl_tarif WHERE tbl_tarif.layanan_id = id_layanan AND tbl_tarif.kota_id = id_kota AND tbl_tarif.pelanggan_id = id_pelanggan ) AS lead_time_real, ( SELECT SUM(qty) FROM tbl_trx_pbk_detail WHERE tbl_trx_pbk_detail.trx_pbk_id = id_utama ) AS total_qty, ( SELECT GROUP_CONCAT( DISTINCT nama_barang ORDER BY nama_barang SEPARATOR ", " ) AS barang FROM tbl_trx_pbk INNER JOIN tbl_trx_pbk_detail on tbl_trx_pbk.trx_pbk_id = tbl_trx_pbk_detail.trx_pbk_id INNER JOIN tbl_barang on tbl_trx_pbk_detail.barang_id = tbl_barang.barang_id WHERE tbl_trx_pbk.trx_pbk_id = id_utama GROUP BY tbl_trx_pbk.trx_pbk_id ORDER BY tbl_trx_pbk_detail.trx_pbk_id ASC ) as barang, ( SELECT GROUP_CONCAT( DISTINCT nama_gudang ORDER BY nama_gudang SEPARATOR ", " ) AS gudang FROM tbl_trx_pbk INNER JOIN tbl_trx_pbk_detail on tbl_trx_pbk.trx_pbk_id = tbl_trx_pbk_detail.trx_pbk_id INNER JOIN tbl_barang on tbl_trx_pbk_detail.barang_id = tbl_barang.barang_id INNER JOIN tbl_trx_pbm_detail ON tbl_trx_pbk_detail.barang_id = tbl_trx_pbm_detail.barang_id INNER JOIN tbl_trx_pbm_alokasi ON tbl_trx_pbm_detail.trx_pbm_detail_id = tbl_trx_pbm_alokasi.trx_pbm_detail_id INNER JOIN tbl_gudang ON tbl_trx_pbm_alokasi.gudang_id = tbl_gudang.gudang_id WHERE tbl_trx_pbk.trx_pbk_id = id_utama ORDER BY tbl_trx_pbk_detail.trx_pbk_id ASC ) as gudang, tbl_trx_pbk.created_at FROM tbl_trx_pbk INNER JOIN tbl_master_kota on tbl_trx_pbk.kota_id = tbl_master_kota.kota_id INNER JOIN tbl_pelanggan on tbl_trx_pbk.pelanggan_id = tbl_pelanggan.pelanggan_id INNER JOIN tbl_jenis_layanan on tbl_trx_pbk.layanan_id = tbl_jenis_layanan.layanan_id WHERE tbl_trx_pbk.status = 1 AND tbl_trx_pbk.level = 1 ORDER BY tbl_trx_pbk.created_at DESC;'); // Rubah ke ORM Model nanti
+        //return $data_list_pbk_acc; 
+        return view('SPS/PBK/list_pbk_sps_acc',compact('data_list_pbk_acc'));
+    }
+
+    public function mintainfopbk(Request $request) {
+        $data_list_informasi_pbk = DB::select('SELECT tbl_trx_pbk.trx_pbk_id AS id_utama, tbl_trx_pbk_detail.barang_id as id_barang, tbl_barang.SKU, tbl_kategori_barang.kode_sku, tbl_barang.nama_barang, ( SELECT sum(tbl_trx_pbm_alokasi.alokasi_akt) FROM tbl_trx_pbm_detail INNER JOIN tbl_trx_pbm_alokasi ON tbl_trx_pbm_detail.trx_pbm_detail_id = tbl_trx_pbm_alokasi.trx_pbm_detail_id WHERE tbl_trx_pbm_detail.barang_id = id_barang ) AS stock_akt, tbl_trx_pbk_detail.stock, tbl_trx_pbk_detail.qty, tbl_trx_pbk_detail.sisa, (SELECT GROUP_CONCAT( DISTINCT nama_gudang ORDER BY nama_gudang SEPARATOR ", " ) AS gudang FROM tbl_trx_pbk INNER JOIN tbl_trx_pbk_detail on tbl_trx_pbk.trx_pbk_id = tbl_trx_pbk_detail.trx_pbk_id INNER JOIN tbl_barang on tbl_trx_pbk_detail.barang_id = tbl_barang.barang_id INNER JOIN tbl_trx_pbm_detail ON tbl_trx_pbk_detail.barang_id = tbl_trx_pbm_detail.barang_id INNER JOIN tbl_trx_pbm_alokasi ON tbl_trx_pbm_detail.trx_pbm_detail_id = tbl_trx_pbm_alokasi.trx_pbm_detail_id INNER JOIN tbl_gudang ON tbl_trx_pbm_alokasi.gudang_id = tbl_gudang.gudang_id WHERE tbl_trx_pbk.trx_pbk_id = id_utama ORDER BY tbl_trx_pbk_detail.trx_pbk_id ASC ) as gudang FROM tbl_trx_pbk INNER JOIN tbl_trx_pbk_detail ON tbl_trx_pbk.trx_pbk_id = tbl_trx_pbk_detail.trx_pbk_id INNER JOIN tbl_barang ON tbl_trx_pbk_detail.barang_id = tbl_barang.barang_id INNER JOIN tbl_kategori_barang ON tbl_barang.kategori_id = tbl_kategori_barang.kategori_id WHERE tbl_trx_pbk.trx_pbk_id = '.$request->id_pbk);
+        return response()->json($data_list_informasi_pbk);
+        //Harus Rubah ke format JSON untuk keamanan
     }
 
     public function formpbksps2() {
