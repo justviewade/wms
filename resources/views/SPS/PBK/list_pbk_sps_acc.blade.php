@@ -306,7 +306,7 @@
             $('#modal-trx_pbk_id').val(id);
             $('#modal-kode_pbk').val(judul);
             $('#actionForm').attr('action', '{{ url("updatepbkspsacc") }}');
-             
+            
          }
     </script>
     <script src="{{asset ('plugins/input-mask/jquery.inputmask.bundle.min.js')}}"></script>
