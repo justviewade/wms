@@ -545,6 +545,24 @@ class SPSController extends Controller
         //Harus Rubah ke format JSON untuk keamanan
     }
 
+    public function updatepbkspsacc(Request $request){
+        return $request;
+        //Kurang Exception Required Value diview
+        $data_trx_pbm_acc = new Trx_PBM_Acc;
+        $data_trx_pbm_acc->trx_pbm_id = $request->trx_pbm_id;
+        $data_trx_pbm_acc->catatan_acc = $request->catatan;
+        $data_trx_pbm_acc->tgl_acc = date('Y-m-d H:i:s');
+        $data_trx_pbm_acc->pembuat = Session::get('user_id');
+        $data_trx_pbm_acc->save();
+
+        $data_trx_pbm = Trx_PBM::findOrFail($request->trx_pbm_id);
+        $data_trx_pbm->level = 2;
+        $data_trx_pbm->update();
+
+        $pesan = 'PBk - '.$request->kode_pbk.', berhasil dikonfirmasi dan masuk ke tahap Penerimaan Barang';
+        return redirect('listpbmspsacc')->with(['pesan' => $pesan]);
+    }
+
     public function formpbksps2() {
         $kode_pbm = "PBK - 00001";
         $data_bar = DB::select('SELECT tbl_barang.barang_id, tbl_barang.nama_barang, tbl_kategori_barang.kode_sku, tbl_barang.SKU FROM `tbl_barang` INNER JOIN tbl_kategori_barang on tbl_barang.kategori_id = tbl_kategori_barang.kategori_id ORDER BY tbl_barang.nama_barang ASC;');

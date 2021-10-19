@@ -63,7 +63,7 @@
                             <tfoot>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Kode PBM</th>
+                                    <th>Kode PBK</th>
                                     <th>Tgl Barang Masuk</th>
                                     <th>List Barang</th>
                                     <th>List Supplier</th>
@@ -231,6 +231,7 @@
 @endsection
 
 @section('scriptbuttom')
+
  <!-- BEGIN PAGE LEVEL CUSTOM SCRIPTS -->
  <script src="{{asset ('plugins/table/datatable/datatables.js')}}"></script>
     <script>
@@ -306,16 +307,17 @@
             $('#modal-trx_pbk_id').val(id);
             $('#modal-kode_pbk').val(judul);
             $('#actionForm').attr('action', '{{ url("updatepbkspsacc") }}');
-            
          }
+         
     </script>
     <script src="{{asset ('plugins/input-mask/jquery.inputmask.bundle.min.js')}}"></script>
     <script src="{{asset ('plugins/jquery-mask/jquery.mask.min.js')}}"></script>
     <script src="{{asset ('plugins/highlight/highlight.pack.js')}}"></script>   
     <script>
-             $('#info4').mask("000,000,000,000,000", {reverse: true}); 
-             $('#info5').mask("000,000,000,000,000", {reverse: true}); 
+          $('#info4').mask("000,000,000,000,000", {reverse: true}); 
+          $('#info5').mask("000,000,000,000,000", {reverse: true}); 
     </script>
+    <!-- Masking Harus belum bisa work-->
     <script src="{{asset ('plugins/sweetalerts/sweetalert2.min.js')}}"></script>
     <script src="{{asset ('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
     <script src="{{asset ('assets/js/list-custom.js')}}"></script>
