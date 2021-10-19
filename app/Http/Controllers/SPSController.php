@@ -21,6 +21,7 @@ use App\Trx_PBM_Terima;
 use App\Trx_PBM_Alokasi;
 use App\Trx_PBM_Detail;
 use App\Trx_PBK;
+use App\Trx_PBK_Acc;
 use App\Tarif;
 Use Session;
 use DB;
@@ -546,21 +547,21 @@ class SPSController extends Controller
     }
 
     public function updatepbkspsacc(Request $request){
-        return $request;
+        //return $request;
         //Kurang Exception Required Value diview
-        $data_trx_pbm_acc = new Trx_PBM_Acc;
-        $data_trx_pbm_acc->trx_pbm_id = $request->trx_pbm_id;
-        $data_trx_pbm_acc->catatan_acc = $request->catatan;
-        $data_trx_pbm_acc->tgl_acc = date('Y-m-d H:i:s');
-        $data_trx_pbm_acc->pembuat = Session::get('user_id');
-        $data_trx_pbm_acc->save();
+        $data_trx_pbk_acc = new Trx_PBK_Acc;
+        $data_trx_pbk_acc->trx_pbk_id = $request->trx_pbk_id;
+        $data_trx_pbk_acc->catatan_acc = $request->catatan;
+        $data_trx_pbk_acc->tgl_acc = date('Y-m-d H:i:s');
+        $data_trx_pbk_acc->pembuat = Session::get('user_id');
+        $data_trx_pbk_acc->save();
 
-        $data_trx_pbm = Trx_PBM::findOrFail($request->trx_pbm_id);
-        $data_trx_pbm->level = 2;
-        $data_trx_pbm->update();
+        $data_trx_pbk = Trx_PBK::findOrFail($request->trx_pbk_id);
+        $data_trx_pbk->level = 2;
+        $data_trx_pbk->update();
 
-        $pesan = 'PBk - '.$request->kode_pbk.', berhasil dikonfirmasi dan masuk ke tahap Penerimaan Barang';
-        return redirect('listpbmspsacc')->with(['pesan' => $pesan]);
+        $pesan = 'PBK - '.$request->kode_pbk.', berhasil dikonfirmasi dan masuk ke tahap Penerimaan Barang';
+        return redirect('listpbkspsacc')->with(['pesan' => $pesan]);
     }
 
     public function formpbksps2() {
