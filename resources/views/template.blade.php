@@ -499,17 +499,17 @@
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbmspsterima')}}"> Penerimaan Barang {{(\App\Trx_PBM::all()->where('level','=',2)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',2)->count().')' : ''}} </a>
+                                <a href="{{url('listpbmspsterima')}}"> [O] Penerimaan Barang {{(\App\Trx_PBM::all()->where('level','=',2)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',2)->count().')' : ''}} </a>
                             </li>
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbmspskekurangan')}}"> Penerimaan Kekurangan {{(\App\Trx_PBM::all()->where('level','=',3)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',3)->count().')' : ''}} </a>
+                                <a href="{{url('listpbmspskekurangan')}}"> [O] Penerimaan Kekurangan {{(\App\Trx_PBM::all()->where('level','=',3)->count() > 0 ) ? '('.\App\Trx_PBM::all()->where('level','=',3)->count().')' : ''}} </a>
                             </li>
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbmspsalokasi')}}"> Alokasi Barang {{(\App\Trx_PBM::where('level','=',3)->orWhere('level',4)->count() > 0 ) ? '('.\App\Trx_PBM::where('level','=',3)->orWhere('level',4)->count().')' : ''}}</a>
+                                <a href="{{url('listpbmspsalokasi')}}"> [G] Alokasi Barang {{(\App\Trx_PBM::where('level','=',3)->orWhere('level',4)->count() > 0 ) ? '('.\App\Trx_PBM::where('level','=',3)->orWhere('level',4)->count().')' : ''}}</a>
                             </li>
                         </ul>
                     </li>
@@ -530,12 +530,12 @@
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbksps2')}}"> Pehitungan Stok </a>
+                                <a href="{{url('listpbkstock')}}"> [G] Pehitungan Stok  </a>
                             </li>
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">
                             <li>
-                                <a href="{{url('listpbksps3')}}"> Packing & Kirim Barang </a>
+                                <a href="{{url('listpbksps3')}}"> [O] Packing & Kirim Barang </a>
                             </li>
                         </ul>
                         <ul class="collapse submenu list-unstyled" id="forms" data-parent="#accordionExample">

@@ -560,8 +560,14 @@ class SPSController extends Controller
         $data_trx_pbk->level = 2;
         $data_trx_pbk->update();
 
-        $pesan = 'PBK - '.$request->kode_pbk.', berhasil dikonfirmasi dan masuk ke tahap Penerimaan Barang';
+        $pesan = 'PBK - '.$request->kode_pbk.', berhasil dikonfirmasi dan masuk ke tahap Perhitungan Stock Barang';
         return redirect('listpbkspsacc')->with(['pesan' => $pesan]);
+    }
+
+    public function listpbkstock(){
+        $data_list_stock_pbk = DB::select('select tbl_trx_pbk.status, tbl_trx_pbk.level, tbl_pelanggan.nama_pelanggan, tbl_trx_pbk.trx_pbk_id as id_utama, tbl_trx_pbk.kode_trx_pbk, tbl_trx_pbk.tgl_pbk_masuk, tbl_trx_pbk.tgl_pbk, tbl_trx_pbk.nama_tujuan, tbl_trx_pbk.alamat_tujuan, tbl_master_kota.kota_tujuan, tbl_jenis_layanan.nama_layanan, tbl_trx_pbk.kota_id as id_kota, tbl_trx_pbk.layanan_id as id_layanan, tbl_trx_pbk.pelanggan_id as id_pelanggan, tbl_trx_pbk.tarif_harga, tbl_trx_pbk.lead_time, ( SELECT tbl_tarif.tarif FROM tbl_tarif WHERE tbl_tarif.layanan_id = id_layanan AND tbl_tarif.kota_id = id_kota AND tbl_tarif.pelanggan_id = id_pelanggan ) AS tarif_real, ( SELECT tbl_tarif.leadtime FROM tbl_tarif WHERE tbl_tarif.layanan_id = id_layanan AND tbl_tarif.kota_id = id_kota AND tbl_tarif.pelanggan_id = id_pelanggan ) AS lead_time_real, ( SELECT SUM(qty) FROM tbl_trx_pbk_detail WHERE tbl_trx_pbk_detail.trx_pbk_id = id_utama ) AS total_qty, ( SELECT GROUP_CONCAT( DISTINCT nama_barang ORDER BY nama_barang SEPARATOR ", " ) AS barang FROM tbl_trx_pbk INNER JOIN tbl_trx_pbk_detail on tbl_trx_pbk.trx_pbk_id = tbl_trx_pbk_detail.trx_pbk_id INNER JOIN tbl_barang on tbl_trx_pbk_detail.barang_id = tbl_barang.barang_id WHERE tbl_trx_pbk.trx_pbk_id = id_utama GROUP BY tbl_trx_pbk.trx_pbk_id ORDER BY tbl_trx_pbk_detail.trx_pbk_id ASC ) as barang, ( SELECT GROUP_CONCAT( DISTINCT nama_gudang ORDER BY nama_gudang SEPARATOR ", " ) AS gudang FROM tbl_trx_pbk INNER JOIN tbl_trx_pbk_detail on tbl_trx_pbk.trx_pbk_id = tbl_trx_pbk_detail.trx_pbk_id INNER JOIN tbl_barang on tbl_trx_pbk_detail.barang_id = tbl_barang.barang_id INNER JOIN tbl_trx_pbm_detail ON tbl_trx_pbk_detail.barang_id = tbl_trx_pbm_detail.barang_id INNER JOIN tbl_trx_pbm_alokasi ON tbl_trx_pbm_detail.trx_pbm_detail_id = tbl_trx_pbm_alokasi.trx_pbm_detail_id INNER JOIN tbl_gudang ON tbl_trx_pbm_alokasi.gudang_id = tbl_gudang.gudang_id WHERE tbl_trx_pbk.trx_pbk_id = id_utama ORDER BY tbl_trx_pbk_detail.trx_pbk_id ASC ) as gudang, tbl_trx_pbk.created_at FROM tbl_trx_pbk INNER JOIN tbl_master_kota on tbl_trx_pbk.kota_id = tbl_master_kota.kota_id INNER JOIN tbl_pelanggan on tbl_trx_pbk.pelanggan_id = tbl_pelanggan.pelanggan_id INNER JOIN tbl_jenis_layanan on tbl_trx_pbk.layanan_id = tbl_jenis_layanan.layanan_id WHERE tbl_trx_pbk.status = 1 AND tbl_trx_pbk.level = 2 ORDER BY tbl_trx_pbk.created_at DESC;');
+        return view('SPS/PBK/list_pbk_sps_stock',compact('data_list_stock_pbk'));
+        //return $data_list_stock_pbk;
     }
 
     public function formpbksps2() {
